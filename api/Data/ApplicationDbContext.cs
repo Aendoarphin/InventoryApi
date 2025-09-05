@@ -13,7 +13,8 @@ namespace api.Data
         {
 
         }
-        
+
         public DbSet<Item> Items { get; set; }
+        public DbSet<Vendor> Vendors { get; set; }
     }
 }
