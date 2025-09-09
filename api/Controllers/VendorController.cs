@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using api.Data;
-using api.Interfaces;
 using api.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,62 +11,56 @@ namespace api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class ItemController : ControllerBase
+    public class VendorController : ControllerBase
     {
         private readonly InventoryDbContext _context;
-        private readonly IItemRepository _itemRepo;
-        public ItemController(InventoryDbContext context, IItemRepository itemRepo)
+
+        public VendorController(InventoryDbContext context)
         {
             _context = context;
-            _itemRepo = itemRepo;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var items = await _itemRepo.GetAllAsync();
-            return Ok(items);
+            var vendors = await _context.Vendors.ToListAsync();
+            return Ok(vendors);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Item>> GetItem(int id)
+        public async Task<ActionResult<Vendor>> GetVendor(int id)
         {
-            var item = await _context.Items.FindAsync(id);
-
-            if (item == null)
+            var vendor = await _context.Vendors.FindAsync(id);
+            if (vendor == null)
             {
                 return NotFound();
             }
-
-            return item;
+            return vendor;
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostItem(Item item)
+        public async Task<IActionResult> PostVendor(Vendor vendor)
         {
-            _context.Items.Add(item);
+            _context.Vendors.Add(vendor);
             await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetItem), new { item.id }, item);
+            return CreatedAtAction(nameof(GetVendor), new { vendor.id }, vendor);
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutItem(int id, Item item)
+        [HttpPut]
+        public async Task<IActionResult> PutVendor(int id, Vendor vendor)
         {
-            if (id != item.id)
+            if (id != vendor.id)
             {
                 return BadRequest();
             }
-
-            _context.Entry(item).State = EntityState.Modified;
-
+            _context.Vendors.Entry(vendor).State = EntityState.Modified;
             try
             {
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!_context.Items.Any(i => i.id == id))
+                if (!_context.Vendors.Any(v => v.id == id))
                 {
                     return NotFound();
                 }
@@ -75,22 +68,23 @@ namespace api.Controllers
                 {
                     throw;
                 }
-            }
 
+            }
             return NoContent();
         }
+
 
         [HttpDelete]
         public async Task<IActionResult> DeleteItem(int id)
         {
-            var item = _context.Items.Find(id);
-            if (item == null)
+            var vendor = _context.Vendors.Find(id);
+            if (vendor == null)
             {
                 return NotFound();
             }
-            _context.Items.Remove(item);
+            _context.Vendors.Remove(vendor);
             await _context.SaveChangesAsync();
-            return Ok(item);
+            return Ok(vendor);
         }
     }
 }
