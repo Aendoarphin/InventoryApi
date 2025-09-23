@@ -39,6 +39,13 @@ namespace api.Controllers
             return item;
         }
 
+        [HttpGet("count")]
+        public async Task<ActionResult<Item>> GetItemCount()
+        {
+            var itemCount = await _context.Items.CountAsync();
+            return Ok(itemCount);
+        }
+
         [HttpPost]
         public async Task<IActionResult> PostItem(Item item)
         {

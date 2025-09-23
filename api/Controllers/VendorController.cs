@@ -38,6 +38,13 @@ namespace api.Controllers
             return vendor;
         }
 
+        [HttpGet("count")]
+        public async Task<ActionResult<Vendor>> GetVendorCount()
+        {
+            var vendorCount = await _context.Vendors.CountAsync();
+            return Ok(vendorCount);
+        }
+
         [HttpPost]
         public async Task<IActionResult> PostVendor(Vendor vendor)
         {
@@ -75,7 +82,7 @@ namespace api.Controllers
 
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteItem(int id)
+        public async Task<IActionResult> DeleteVendor(int id)
         {
             var vendor = _context.Vendors.Find(id);
             if (vendor == null)
