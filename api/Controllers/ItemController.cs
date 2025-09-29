@@ -50,13 +50,14 @@ namespace api.Controllers
         public async Task<ActionResult<Item>> GetItemByKeyword(string keyword)
         {
             var matches = await _context.Items.Where(u =>
-                u.id.ToString().Contains(keyword) ||
-                u.serial.Contains(keyword) ||
-                u.description.Contains(keyword) ||
-                u.branch.Contains(keyword) ||
-                u.comments.Contains(keyword) ||
-                u.purchaseDate.ToString().Contains(keyword) ||
-                u.replacementCost.ToString().Contains(keyword)).ToListAsync();
+                u.id.ToString().ToLower().Contains(keyword) ||
+                u.serial!.ToLower().Contains(keyword) ||
+                u.description!.ToLower().Contains(keyword) ||
+                u.branch!.ToLower().Contains(keyword) ||
+                u.office!.ToLower().Contains(keyword) ||
+                u.comments!.ToLower().Contains(keyword) ||
+                u.purchaseDate.ToString()!.ToLower().Contains(keyword) ||
+                u.replacementCost.ToString()!.ToLower().Contains(keyword)).ToListAsync();
             return Ok(matches);
         }
 

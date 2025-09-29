@@ -8,10 +8,10 @@ var envVars = DotEnv.Read();
 
 string AllowReactClient = "_allowReactClient";
 string[] AllowedOrigins = [
-    "http://localhost:3000", 
-    "https://localhost:3000", 
-    "http://192.168.0.162:3000", 
-    "http://192.168.0.156:3000", 
+    "http://localhost:3000",
+    "https://localhost:3000",
+    "http://192.168.0.162:3000",
+    "http://192.168.0.156:3000",
     "http://10.8.1.21:3000"
 ];
 
