@@ -45,6 +45,26 @@ namespace api.Controllers
             return Ok(vendorCount);
         }
 
+        [HttpGet("search")]
+        public async Task<ActionResult<Vendor>> GetItemByKeyword(string keyword)
+        {
+            var matches = await _context.Vendors.Where(u =>
+                u.id.ToString().ToLower().Contains(keyword) ||
+                u.name!.ToLower().Contains(keyword) ||
+                u.address!.ToLower().Contains(keyword) ||
+                u.city!.ToLower().Contains(keyword) ||
+                u.phone!.ToLower().Contains(keyword) ||
+                u.fax!.ToLower().Contains(keyword) ||
+                u.contact!.ToString()!.ToLower().Contains(keyword) ||
+                u.email!.ToString()!.ToLower().Contains(keyword) ||
+                u.website!.ToString()!.ToLower().Contains(keyword) ||
+                u.productServiceArea!.ToString()!.ToLower().Contains(keyword) ||
+                u.contractOnFile!.ToString()!.ToLower().Contains(keyword) ||
+                u.critical!.ToString()!.ToLower().Contains(keyword) ||
+                u.comments!.ToString()!.ToLower().Contains(keyword)).ToListAsync();
+            return Ok(matches);
+        }
+
         [HttpPost]
         public async Task<IActionResult> PostVendor(Vendor vendor)
         {
