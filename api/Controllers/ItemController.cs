@@ -51,11 +51,11 @@ namespace api.Controllers
         {
             var matches = await _context.Items.Where(u =>
                 u.id.ToString().ToLower().Contains(keyword) ||
-                u.serial!.ToLower().Contains(keyword) ||
-                u.description!.ToLower().Contains(keyword) ||
-                u.branch!.ToLower().Contains(keyword) ||
-                u.office!.ToLower().Contains(keyword) ||
-                u.comments!.ToLower().Contains(keyword) ||
+                u.serial!.ToString().ToLower().Contains(keyword) ||
+                u.description!.ToString().ToLower().Contains(keyword) ||
+                u.branch!.ToString().ToLower().Contains(keyword) ||
+                u.office!.ToString().ToLower().Contains(keyword) ||
+                u.comments!.ToString().ToLower().Contains(keyword) ||
                 u.purchaseDate.ToString()!.ToLower().Contains(keyword) ||
                 u.replacementCost.ToString()!.ToLower().Contains(keyword)).ToListAsync();
             return Ok(matches);
@@ -70,7 +70,7 @@ namespace api.Controllers
             return CreatedAtAction(nameof(GetItem), new { item.id }, item);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut]
         public async Task<IActionResult> PutItem(int id, Item item)
         {
             if (id != item.id)
@@ -78,7 +78,7 @@ namespace api.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(item).State = EntityState.Modified;
+            _context.Items.Entry(item).State = EntityState.Modified;
 
             try
             {
