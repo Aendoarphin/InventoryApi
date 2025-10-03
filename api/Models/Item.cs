@@ -28,7 +28,7 @@ namespace api.Models
             ReplacementCost = null;
         }
 
-        public Item(int Id, string? Serial, string? description, string? branch, string? office, string? Comments, DateTime? PurchaseDate, decimal? ReplacementCost)
+        public Item(int Id, string? Serial, string? Description, string? Branch, string? Office, string? Comments, DateTime? PurchaseDate, decimal? ReplacementCost)
         {
             this.Id = Id;
             this.Serial = Serial;

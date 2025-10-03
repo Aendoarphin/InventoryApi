@@ -12,8 +12,10 @@ namespace api.Data
         public InventoryDbContext(DbContextOptions<InventoryDbContext> options) : base(options)
         {
         }
-        
+
         public DbSet<Item> Items { get; set; }
         public DbSet<Vendor> Vendors { get; set; }
+        public DbSet<Issue> Issues { get; set; }
+        public DbSet<Entity> Entities { get; set; }
     }
 }
