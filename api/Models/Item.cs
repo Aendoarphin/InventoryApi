@@ -7,37 +7,37 @@ namespace api.Models
 {
     public class Item
     {
-        public required int id { get; set; }
-        public string? serial { get; set; }
-        public string? description { get; set; }
-        public string? branch { get; set; }
-        public string? office { get; set; }
-        public string? comments { get; set; }
-        public DateTime? purchaseDate { get; set; }
-        public decimal? replacementCost { get; set; }
+        public required int Id { get; set; }
+        public string? Serial { get; set; }
+        public string? Description { get; set; }
+        public string? Branch { get; set; }
+        public string? Office { get; set; }
+        public string? Comments { get; set; }
+        public DateTime? PurchaseDate { get; set; }
+        public decimal? ReplacementCost { get; set; }
 
         public Item()
         {
-            id = 0;
-            serial = null;
-            description = null;
-            branch = null;
-            office = null;
-            comments = null;
-            purchaseDate = null;
-            replacementCost = null;
+            Id = 0;
+            Serial = null;
+            Description = null;
+            Branch = null;
+            Office = null;
+            Comments = null;
+            PurchaseDate = null;
+            ReplacementCost = null;
         }
 
-        public Item(int id, string? serial, string? description, string? branch, string? office, string? comments, DateTime? purchaseDate, decimal? replacementCost)
+        public Item(int Id, string? Serial, string? description, string? branch, string? office, string? Comments, DateTime? PurchaseDate, decimal? ReplacementCost)
         {
-            this.id = id;
-            this.serial = serial;
-            this.description = description;
-            this.branch = branch;
-            this.office = office;
-            this.comments = comments;
-            this.purchaseDate = purchaseDate;
-            this.replacementCost = replacementCost;
+            this.Id = Id;
+            this.Serial = Serial;
+            this.Description = Description;
+            this.Branch = Branch;
+            this.Office = Office;
+            this.Comments = Comments;
+            this.PurchaseDate = PurchaseDate;
+            this.ReplacementCost = ReplacementCost;
         }
     }
 }

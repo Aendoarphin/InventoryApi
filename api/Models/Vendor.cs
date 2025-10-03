@@ -7,66 +7,66 @@ namespace api.Models
 {
     public class Vendor
     {
-        public required int id { get; set; }
-        public string? name { get; set; }
-        public string? address { get; set; }
-        public string? city { get; set; }
-        public string? phone { get; set; }
-        public string? fax { get; set; }
-        public string? contact { get; set; }
-        public string? email { get; set; }
-        public string? website { get; set; }
-        public string? productServiceArea { get; set; }
-        public string? contractOnFile { get; set; }
-        public string? critical { get; set; }
-        public string? comments { get; set; }
+        public required int Id { get; set; }
+        public string? Name { get; set; }
+        public string? Address { get; set; }
+        public string? City { get; set; }
+        public string? Phone { get; set; }
+        public string? Fax { get; set; }
+        public string? Contact { get; set; }
+        public string? Email { get; set; }
+        public string? Website { get; set; }
+        public string? ProductServiceArea { get; set; }
+        public string? ContractOnFile { get; set; }
+        public string? Critical { get; set; }
+        public string? Comments { get; set; }
 
         public Vendor()
         {
-            id = 0;
-            name = null;
-            address = null;
-            city = null;
-            phone = null;
-            fax = null;
-            contact = null;
-            email = null;
-            website = null;
-            productServiceArea = null;
-            contractOnFile = null;
-            critical = null;
-            comments = null;
+            Id = 0;
+            Name = null;
+            Address = null;
+            City = null;
+            Phone = null;
+            Fax = null;
+            Contact = null;
+            Email = null;
+            Website = null;
+            ProductServiceArea = null;
+            ContractOnFile = null;
+            Critical = null;
+            Comments = null;
         }
 
         public Vendor(
-            int id,
-            string? name,
-            string? address,
-            string? city,
-            string? phone,
-            string? fax,
-            string? contact,
-            string? email,
-            string? website,
-            string? productServiceArea,
-            string? contractOnFile,
-            string? critical,
-            string? comments
+            int Id,
+            string? Name,
+            string? Address,
+            string? City,
+            string? Phone,
+            string? Fax,
+            string? Contact,
+            string? Email,
+            string? Website,
+            string? ProductServiceArea,
+            string? ContractOnFile,
+            string? Critical,
+            string? Comments
         )
         {
-            this.id = id;
-            this.name = name;
-            this.address = address;
-            this.city = city;
-            this.phone = phone;
-            this.fax = fax;
-            this.contact = contact;
-            this.email = email;
-            this.website = website;
-            this.productServiceArea = productServiceArea;
-            this.contractOnFile = contractOnFile;
-            this.critical = critical;
-            this.comments = comments;
+            this.Id = Id;
+            this.Name = Name;
+            this.Address = Address;
+            this.City = City;
+            this.Phone = Phone;
+            this.Fax = Fax;
+            this.Contact = Contact;
+            this.Email = Email;
+            this.Website = Website;
+            this.ProductServiceArea = ProductServiceArea;
+            this.ContractOnFile = ContractOnFile;
+            this.Critical = Critical;
+            this.Comments = Comments;
         }
     }
 }

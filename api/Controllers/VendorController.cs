@@ -49,19 +49,19 @@ namespace api.Controllers
         public async Task<ActionResult<Vendor>> GetItemByKeyword(string keyword)
         {
             var matches = await _context.Vendors.Where(u =>
-                u.id.ToString().ToLower().Contains(keyword) ||
-                u.name!.ToLower().Contains(keyword) ||
-                u.address!.ToLower().Contains(keyword) ||
-                u.city!.ToLower().Contains(keyword) ||
-                u.phone!.ToLower().Contains(keyword) ||
-                u.fax!.ToLower().Contains(keyword) ||
-                u.contact!.ToString()!.ToLower().Contains(keyword) ||
-                u.email!.ToString()!.ToLower().Contains(keyword) ||
-                u.website!.ToString()!.ToLower().Contains(keyword) ||
-                u.productServiceArea!.ToString()!.ToLower().Contains(keyword) ||
-                u.contractOnFile!.ToString()!.ToLower().Contains(keyword) ||
-                u.critical!.ToString()!.ToLower().Contains(keyword) ||
-                u.comments!.ToString()!.ToLower().Contains(keyword)).ToListAsync();
+                u.Id.ToString().ToLower().Contains(keyword) ||
+                u.Name!.ToLower().Contains(keyword) ||
+                u.Address!.ToLower().Contains(keyword) ||
+                u.City!.ToLower().Contains(keyword) ||
+                u.Phone!.ToLower().Contains(keyword) ||
+                u.Fax!.ToLower().Contains(keyword) ||
+                u.Contact!.ToString()!.ToLower().Contains(keyword) ||
+                u.Email!.ToString()!.ToLower().Contains(keyword) ||
+                u.Website!.ToString()!.ToLower().Contains(keyword) ||
+                u.ProductServiceArea!.ToString()!.ToLower().Contains(keyword) ||
+                u.ContractOnFile!.ToString()!.ToLower().Contains(keyword) ||
+                u.Critical!.ToString()!.ToLower().Contains(keyword) ||
+                u.Comments!.ToString()!.ToLower().Contains(keyword)).ToListAsync();
             return Ok(matches);
         }
 
@@ -70,13 +70,13 @@ namespace api.Controllers
         {
             _context.Vendors.Add(vendor);
             await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetVendor), new { vendor.id }, vendor);
+            return CreatedAtAction(nameof(GetVendor), new { vendor.Id }, vendor);
         }
 
         [HttpPut]
         public async Task<IActionResult> PutVendor(int id, Vendor vendor)
         {
-            if (id != vendor.id)
+            if (id != vendor.Id)
             {
                 return BadRequest();
             }
@@ -87,7 +87,7 @@ namespace api.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!_context.Vendors.Any(v => v.id == id))
+                if (!_context.Vendors.Any(v => v.Id == id))
                 {
                     return NotFound();
                 }

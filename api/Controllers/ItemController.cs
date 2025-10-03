@@ -50,14 +50,14 @@ namespace api.Controllers
         public async Task<ActionResult<Item>> GetItemByKeyword(string keyword)
         {
             var matches = await _context.Items.Where(u =>
-                u.id.ToString().ToLower().Contains(keyword) ||
-                u.serial!.ToString().ToLower().Contains(keyword) ||
-                u.description!.ToString().ToLower().Contains(keyword) ||
-                u.branch!.ToString().ToLower().Contains(keyword) ||
-                u.office!.ToString().ToLower().Contains(keyword) ||
-                u.comments!.ToString().ToLower().Contains(keyword) ||
-                u.purchaseDate.ToString()!.ToLower().Contains(keyword) ||
-                u.replacementCost.ToString()!.ToLower().Contains(keyword)).ToListAsync();
+                u.Id.ToString().ToLower().Contains(keyword) ||
+                u.Serial!.ToString().ToLower().Contains(keyword) ||
+                u.Description!.ToString().ToLower().Contains(keyword) ||
+                u.Branch!.ToString().ToLower().Contains(keyword) ||
+                u.Office!.ToString().ToLower().Contains(keyword) ||
+                u.Comments!.ToString().ToLower().Contains(keyword) ||
+                u.PurchaseDate.ToString()!.ToLower().Contains(keyword) ||
+                u.ReplacementCost.ToString()!.ToLower().Contains(keyword)).ToListAsync();
             return Ok(matches);
         }
 
@@ -67,13 +67,13 @@ namespace api.Controllers
             _context.Items.Add(item);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetItem), new { item.id }, item);
+            return CreatedAtAction(nameof(GetItem), new { item.Id }, item);
         }
 
         [HttpPut]
         public async Task<IActionResult> PutItem(int id, Item item)
         {
-            if (id != item.id)
+            if (id != item.Id)
             {
                 return BadRequest();
             }
@@ -86,7 +86,7 @@ namespace api.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!_context.Items.Any(i => i.id == id))
+                if (!_context.Items.Any(i => i.Id == id))
                 {
                     return NotFound();
                 }
