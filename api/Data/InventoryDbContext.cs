@@ -16,6 +16,9 @@ namespace api.Data
         public DbSet<Item> Items { get; set; }
         public DbSet<Vendor> Vendors { get; set; }
         public DbSet<Issue> Issues { get; set; }
+
+        /*######## ENABLE WHEN TABLE CREATION FEATURE IS MADE #######*/
         public DbSet<Entity> Entities { get; set; }
+        /*###########################################################*/
     }
 }

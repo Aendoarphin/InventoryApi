@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using api.Data;
 using api.Models;
@@ -49,15 +50,15 @@ namespace api.Controllers
         [HttpGet("search")]
         public async Task<ActionResult<Item>> GetItemByKeyword(string keyword)
         {
-            var matches = await _context.Items.Where(u =>
-                u.Id.ToString().ToLower().Contains(keyword) ||
-                u.Serial!.ToString().ToLower().Contains(keyword) ||
-                u.Description!.ToString().ToLower().Contains(keyword) ||
-                u.Branch!.ToString().ToLower().Contains(keyword) ||
-                u.Office!.ToString().ToLower().Contains(keyword) ||
-                u.Comments!.ToString().ToLower().Contains(keyword) ||
-                u.PurchaseDate.ToString()!.ToLower().Contains(keyword) ||
-                u.ReplacementCost.ToString()!.ToLower().Contains(keyword)).ToListAsync();
+            var matches = await _context.Items.Where(i =>
+                i.Id.ToString().ToLower().Contains(keyword) ||
+                i.Serial!.ToString().ToLower().Contains(keyword) ||
+                i.Description!.ToString().ToLower().Contains(keyword) ||
+                i.Branch!.ToString().ToLower().Contains(keyword) ||
+                i.Office!.ToString().ToLower().Contains(keyword) ||
+                i.Comments!.ToString().ToLower().Contains(keyword) ||
+                i.PurchaseDate.ToString()!.ToLower().Contains(keyword) ||
+                i.ReplacementCost.ToString()!.ToLower().Contains(keyword)).ToListAsync();
             return Ok(matches);
         }
 
@@ -65,6 +66,9 @@ namespace api.Controllers
         public async Task<IActionResult> PostItem(Item item)
         {
             _context.Items.Add(item);
+
+            
+
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetItem), new { item.Id }, item);
