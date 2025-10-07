@@ -1,4 +1,6 @@
 using api.Data;
+using api.Interfaces;
+using api.Repositories;
 using dotenv.net;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Net.Http.Headers;
@@ -20,6 +22,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddDbContext<InventoryDbContext>(options => options.UseSqlServer(envVars["CONN_STR_DEV"]));
 builder.Services.AddControllers();
+builder.Services.AddScoped<IRecordValidationRepository, RecordValidationRepository>();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: AllowReactClient, policy =>

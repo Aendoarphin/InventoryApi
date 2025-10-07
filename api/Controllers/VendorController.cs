@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using api.Data;
+using api.Dtos;
+using api.Interfaces;
 using api.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,14 +16,16 @@ namespace api.Controllers
     public class VendorController : ControllerBase
     {
         private readonly InventoryDbContext _context;
+        private readonly IRecordValidationRepository _recordValidationRepo;
 
-        public VendorController(InventoryDbContext context)
+        public VendorController(InventoryDbContext context, IRecordValidationRepository recordValidationRepo)
         {
             _context = context;
+            _recordValidationRepo = recordValidationRepo;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<ActionResult> GetAll()
         {
             var vendors = await _context.Vendors.ToListAsync();
             return Ok(vendors);
@@ -46,7 +50,7 @@ namespace api.Controllers
         }
 
         [HttpGet("search")]
-        public async Task<ActionResult<Vendor>> GetItemByKeyword(string keyword)
+        public async Task<ActionResult<Vendor>> GetVendorByKeyword(string keyword)
         {
             var matches = await _context.Vendors.Where(u =>
                 u.Id.ToString().ToLower().Contains(keyword) ||
@@ -65,8 +69,32 @@ namespace api.Controllers
             return Ok(matches);
         }
 
+        [HttpGet("partial")]
+        public async Task<ActionResult> GetPartialVendors()
+        {
+            var partialVendors = await _recordValidationRepo.GetPartialRecords<Vendor>();
+            return Ok(partialVendors);
+        }
+
+        [HttpGet("partial/count")]
+        public async Task<ActionResult<int>> GetPartialVendorsCount()
+        {
+            var count = await _recordValidationRepo.GetTotalPartialRecords<Vendor>();
+            return count;
+        }
+
+        [HttpGet("metrics")]
+        public async Task<ActionResult<RecordMetricDto>> GetVendorMetrics()
+        {
+            var partialCount = await _recordValidationRepo.GetTotalPartialRecords<Vendor>();
+            var totalCount = await _context.Vendors.CountAsync();
+            var metrics = new RecordMetricDto { Complete = totalCount - partialCount, Partial = partialCount };
+            Console.WriteLine(metrics);
+            return metrics;
+        }
+
         [HttpPost]
-        public async Task<IActionResult> PostVendor(Vendor vendor)
+        public async Task<ActionResult> PostVendor(Vendor vendor)
         {
             _context.Vendors.Add(vendor);
             await _context.SaveChangesAsync();
@@ -74,7 +102,7 @@ namespace api.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> PutVendor(int id, Vendor vendor)
+        public async Task<ActionResult> PutVendor(int id, Vendor vendor)
         {
             if (id != vendor.Id)
             {
@@ -102,7 +130,7 @@ namespace api.Controllers
 
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteVendor(int id)
+        public async Task<ActionResult> DeleteVendor(int id)
         {
             var vendor = _context.Vendors.Find(id);
             if (vendor == null)

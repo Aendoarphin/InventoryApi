@@ -4,6 +4,8 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using api.Data;
+using api.Dtos;
+using api.Interfaces;
 using api.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,13 +17,15 @@ namespace api.Controllers
     public class ItemController : ControllerBase
     {
         private readonly InventoryDbContext _context;
-        public ItemController(InventoryDbContext context)
+        private readonly IRecordValidationRepository _recordValidationRepo;
+        public ItemController(InventoryDbContext context, IRecordValidationRepository recordValidationRepo)
         {
             _context = context;
+            _recordValidationRepo = recordValidationRepo;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<ActionResult> GetAll()
         {
             var items = await _context.Items.ToListAsync();
             return Ok(items);
@@ -62,12 +66,34 @@ namespace api.Controllers
             return Ok(matches);
         }
 
+        [HttpGet("partial")]
+        public async Task<ActionResult> GetPartialItems()
+        {
+            var partialItems = await _recordValidationRepo.GetPartialRecords<Item>();
+            return Ok(partialItems);
+        }
+
+        [HttpGet("partial/count")]
+        public async Task<ActionResult<int>> GetPartialItemsCount()
+        {
+            var count = await _recordValidationRepo.GetTotalPartialRecords<Item>();
+            return count;
+        }
+
+        [HttpGet("metrics")]
+        public async Task<ActionResult<RecordMetricDto>> GetItemMetrics()
+        {
+            var partialCount = await _recordValidationRepo.GetTotalPartialRecords<Item>();
+            var totalCount = await _context.Items.CountAsync();
+            var metrics = new RecordMetricDto { Complete = totalCount - partialCount, Partial = partialCount };
+            Console.WriteLine(metrics);
+            return metrics;
+        }
+
         [HttpPost]
-        public async Task<IActionResult> PostItem(Item item)
+        public async Task<ActionResult> PostItem(Item item)
         {
             _context.Items.Add(item);
-
-            
 
             await _context.SaveChangesAsync();
 
@@ -75,7 +101,7 @@ namespace api.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> PutItem(int id, Item item)
+        public async Task<ActionResult> PutItem(int id, Item item)
         {
             if (id != item.Id)
             {
@@ -104,7 +130,7 @@ namespace api.Controllers
         }
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteItem(int id)
+        public async Task<ActionResult> DeleteItem(int id)
         {
             var item = _context.Items.Find(id);
             if (item == null)

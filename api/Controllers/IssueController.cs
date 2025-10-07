@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using api.Data;
+using api.Interfaces;
 using api.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -21,15 +22,13 @@ namespace api.Controllers
             _context = context;
         }
 
-        // Get all issues
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<ActionResult> GetAll()
         {
             var issues = await _context.Issues.ToListAsync();
             return Ok(issues);
         }
 
-        // Get issue by ID
         [HttpGet("{id}")]
         public async Task<ActionResult<Issue>> GetIssue(int id)
         {
@@ -54,7 +53,6 @@ namespace api.Controllers
             return NotFound();
         }
 
-        // Get total issues  
         [HttpGet("count")]
         public async Task<ActionResult<Issue>> GetCount()
         {
@@ -62,7 +60,6 @@ namespace api.Controllers
             return Ok(totalIssues);
         }
 
-        // Create new issue
         [HttpPost]
         public async Task<ActionResult<Issue>> PostIssue(Issue issue)
         {
@@ -72,9 +69,8 @@ namespace api.Controllers
             return CreatedAtAction(nameof(GetIssue), new { issue.Id }, issue);
         }
 
-        // Update issue
         [HttpPut]
-        public async Task<IActionResult> PutIssue(int id, Issue issue)
+        public async Task<ActionResult> PutIssue(int id, Issue issue)
         {
             if (id != issue.Id)
             {
@@ -100,6 +96,19 @@ namespace api.Controllers
             }
 
             return NoContent();
+        }
+        
+        [HttpDelete]
+        public async Task<ActionResult> DeleteVendor(int id)
+        {
+            var vendor = _context.Vendors.Find(id);
+            if (vendor == null)
+            {
+                return NotFound();
+            }
+            _context.Vendors.Remove(vendor);
+            await _context.SaveChangesAsync();
+            return Ok(vendor);
         }
     }
 }
