@@ -14,7 +14,8 @@ string[] AllowedOrigins = [
     "https://localhost:3000",
     "http://192.168.0.162:3000",
     "http://192.168.0.156:3000",
-    "http://10.8.1.21:3000"
+    "http://10.8.1.21:3000",
+    "http://localhost:4173",
 ];
 
 var builder = WebApplication.CreateBuilder(args);
