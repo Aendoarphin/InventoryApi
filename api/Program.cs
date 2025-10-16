@@ -1,12 +1,7 @@
 using api.Data;
 using api.Interfaces;
 using api.Repositories;
-using dotenv.net;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Net.Http.Headers;
-
-DotEnv.Load();
-var envVars = DotEnv.Read();
 
 string AllowReactClient = "_allowReactClient";
 string[] AllowedOrigins = [
@@ -20,18 +15,26 @@ string[] AllowedOrigins = [
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Get connection string from configuration
+var connectionString = builder.Configuration["CONN_STR_DEV"]
+    ?? throw new InvalidOperationException("Connection string 'CONN_STR_DEV' not found.");
+
 // Add services to the container.
-builder.Services.AddDbContext<InventoryDbContext>(options => options.UseSqlServer(envVars["CONN_STR_DEV"]));
+builder.Services.AddDbContext<InventoryDbContext>(options =>
+    options.UseSqlServer(connectionString));
+
 builder.Services.AddControllers();
 builder.Services.AddScoped<IRecordValidationRepository, RecordValidationRepository>();
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: AllowReactClient, policy =>
     {
-        policy.WithOrigins(AllowedOrigins)
+        policy.AllowAnyOrigin()
         .AllowAnyHeader().AllowAnyMethod();
     });
 });
+
 // Swagger stuff
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -47,7 +50,6 @@ if (app.Environment.IsDevelopment())
 app.UseCors(AllowReactClient);
 app.UseHttpsRedirection();
 app.MapControllers();
-
-// Routes
+app.MapGet("/", () => "INVENTORY API");
 
 app.Run();
