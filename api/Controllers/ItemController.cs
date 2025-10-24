@@ -103,10 +103,7 @@ namespace api.Controllers
         [HttpPut]
         public async Task<ActionResult> PutItem(int id, Item item)
         {
-            if (id != item.Id)
-            {
-                return BadRequest();
-            }
+            if (id != item.Id) return BadRequest();
 
             _context.Items.Entry(item).State = EntityState.Modified;
 
@@ -133,10 +130,7 @@ namespace api.Controllers
         public async Task<ActionResult> DeleteItem(int id)
         {
             var item = _context.Items.Find(id);
-            if (item == null)
-            {
-                return NotFound();
-            }
+            if (item == null) return NotFound();
             _context.Items.Remove(item);
             await _context.SaveChangesAsync();
             return Ok(item);

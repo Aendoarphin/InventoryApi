@@ -22,8 +22,7 @@ namespace api.Repositories
         public async Task<List<T>> GetPartialRecords<T>() where T : class
         {
             var lambda = BuildNullCheckExpression<T>();
-            if (lambda == null)
-                return new List<T>();
+            if (lambda == null) return new List<T>();
 
             return await _context.Set<T>().Where(lambda).ToListAsync();
         }
@@ -31,8 +30,7 @@ namespace api.Repositories
         public async Task<int> GetTotalPartialRecords<T>() where T : class
         {
             var lambda = BuildNullCheckExpression<T>();
-            if (lambda == null)
-                return 0;
+            if (lambda == null) return 0;
 
             return await _context.Set<T>().CountAsync(lambda);
         }
@@ -59,8 +57,7 @@ namespace api.Repositories
                 }
             }
 
-            if (body == null)
-                return null;
+            if (body == null) return null;
 
             return Expression.Lambda<Func<T, bool>>(body, parameter);
         }

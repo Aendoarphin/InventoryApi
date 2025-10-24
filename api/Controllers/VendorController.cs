@@ -35,10 +35,7 @@ namespace api.Controllers
         public async Task<ActionResult<Vendor>> GetVendor(int id)
         {
             var vendor = await _context.Vendors.FindAsync(id);
-            if (vendor == null)
-            {
-                return NotFound();
-            }
+            if (vendor == null) return NotFound();
             return vendor;
         }
 
@@ -104,10 +101,7 @@ namespace api.Controllers
         [HttpPut]
         public async Task<ActionResult> PutVendor(int id, Vendor vendor)
         {
-            if (id != vendor.Id)
-            {
-                return BadRequest();
-            }
+            if (id != vendor.Id) return BadRequest();
             _context.Vendors.Entry(vendor).State = EntityState.Modified;
             try
             {
@@ -133,10 +127,7 @@ namespace api.Controllers
         public async Task<ActionResult> DeleteVendor(int id)
         {
             var vendor = _context.Vendors.Find(id);
-            if (vendor == null)
-            {
-                return NotFound();
-            }
+            if (vendor == null) return NotFound();
             _context.Vendors.Remove(vendor);
             await _context.SaveChangesAsync();
             return Ok(vendor);
