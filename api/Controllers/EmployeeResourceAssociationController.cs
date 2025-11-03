@@ -37,6 +37,15 @@ namespace api.Controllers
             return employeeResourceAssociation;
         }
 
+        [HttpGet("search")]
+        public async Task<ActionResult<EmployeeResourceAssociation>> GetEmployeeResourceAssociationSearch([FromQuery] int employeeId)
+        {
+            var employeeResourceAssociation = await _context.EmployeeResourceAssociations
+                .FirstOrDefaultAsync(era => era.EmployeeId == employeeId);
+            if (employeeResourceAssociation == null) return NotFound();
+            return employeeResourceAssociation;
+        }
+
         [HttpPost]
         public async Task<ActionResult> PostEmployeeResourceAssociation(EmployeeResourceAssociation employeeResourceAssociation)
         {
