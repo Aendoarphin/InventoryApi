@@ -40,10 +40,10 @@ namespace api.Controllers
         [HttpGet("search")]
         public async Task<ActionResult<EmployeeResourceAssociation>> GetEmployeeResourceAssociationSearch([FromQuery] int employeeId)
         {
-            var employeeResourceAssociation = await _context.EmployeeResourceAssociations
-                .FirstOrDefaultAsync(era => era.EmployeeId == employeeId);
-            if (employeeResourceAssociation == null) return NotFound();
-            return employeeResourceAssociation;
+            var employeeResourceAssociations = await _context.EmployeeResourceAssociations
+                .Where(era => era.EmployeeId == employeeId).ToListAsync();
+            if (employeeResourceAssociations == null) return NotFound();
+            return Ok(employeeResourceAssociations);
         }
 
         [HttpPost]
