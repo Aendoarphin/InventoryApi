@@ -37,6 +37,15 @@ namespace api.Controllers
             return resource;
         }
 
+        [HttpGet("search")]
+        public async Task<ActionResult<Resource>> GetResourceSearch([FromQuery] int? resourceId, [FromQuery] string? resourceName)
+        {
+            var resources = await _context.Resources
+                .Where(r => r.Id == resourceId || r.Name == resourceName).ToListAsync();
+            if (resources == null) return NotFound();
+            return Ok(resources);
+        }
+
         [HttpPost]
         public async Task<ActionResult> PostResource(Resource resource)
         {

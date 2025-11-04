@@ -19,5 +19,6 @@ namespace api.Data
         public DbSet<Resource> Resources { get; set; }
         public DbSet<ResourceCategory> ResourceCategories { get; set; }
         public DbSet<EmployeeResourceAssociation> EmployeeResourceAssociations { get; set; }
+        public DbSet<AccessLevel> AccessLevels { get; set; }
     }
 }

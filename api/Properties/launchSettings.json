@@ -16,7 +16,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "dotnetRunMessages": true,
-      "applicationUrl": "https://localhost:7097;https://192.168.0.156:7097"
+      "applicationUrl": "https://localhost:7097"
     }
   },
   "$schema": "http://json.schemastore.org/launchsettings.json",
