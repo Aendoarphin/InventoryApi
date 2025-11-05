@@ -14,17 +14,20 @@ namespace api.Models
         public int Id { get; set; }
         public required string Name { get; set; }
         public required int CategoryId { get; set; }
+        public required int AccessLevelId { get; set; }
 
         public Resource()
         {
             Name = "";
             CategoryId = 0;
+            AccessLevelId = 0;
         }
         
-        public Resource(string Name, int CategoryId)
+        public Resource(string Name, int CategoryId, int AccessLevelId)
         {
             this.Name = Name;
             this.CategoryId = CategoryId;
+            this.AccessLevelId = AccessLevelId;
         }
     }
 }

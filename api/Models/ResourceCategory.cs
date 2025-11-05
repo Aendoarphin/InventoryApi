@@ -13,15 +13,18 @@ namespace api.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public required string Name { get; set; }
+        public required int Active { get; set; }
 
         public ResourceCategory()
         {
             Name = "";
+            Active = 1;
         }
 
-        public ResourceCategory(string Name)
+        public ResourceCategory(string Name, int Active)
         {
             this.Name = Name;
+            this.Active = Active;
         }
     }
 }
