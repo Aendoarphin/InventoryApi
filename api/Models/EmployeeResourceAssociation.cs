@@ -11,7 +11,7 @@ namespace api.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public required int Id { get; set; }
         public required int ResourceId { get; set; }
         public required int EmployeeId { get; set; }
         public required DateTime Granted { get; set; }

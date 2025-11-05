@@ -11,12 +11,12 @@ namespace api.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public required int Id { get; set; }
         public required string First { get; set; }
         public required string Last { get; set; }
         public required string Branch { get; set; }
         public required string JobTitle { get; set; }
-        public DateTime StartDate { get; set; }
+        public required DateTime StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public required DateTime Created { get; set; }
 

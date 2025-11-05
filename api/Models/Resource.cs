@@ -11,7 +11,7 @@ namespace api.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public required int Id { get; set; }
         public required string Name { get; set; }
         public required int CategoryId { get; set; }
         public required int AccessLevelId { get; set; }
