@@ -15,6 +15,7 @@ namespace api.Models
         public required string Name { get; set; }
         public required int CategoryId { get; set; }
         public required int AccessLevelId { get; set; }
+        public int? Active { get; set; }
 
         public Resource()
         {
@@ -22,12 +23,13 @@ namespace api.Models
             CategoryId = 0;
             AccessLevelId = 0;
         }
-        
-        public Resource(string Name, int CategoryId, int AccessLevelId)
+
+        public Resource(string Name, int CategoryId, int AccessLevelId, int? Active)
         {
             this.Name = Name;
             this.CategoryId = CategoryId;
             this.AccessLevelId = AccessLevelId;
+            this.Active = Active;
         }
     }
 }
