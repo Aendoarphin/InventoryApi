@@ -52,4 +52,6 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.MapControllers();
 
+app.MapGet("/", () => "Inventory API");
+
 app.Run();
