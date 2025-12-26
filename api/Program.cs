@@ -49,7 +49,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors(AllowReactClient);
 app.UseHttpsRedirection();
-app.UseStaticFiles();
 app.MapControllers();
 
 app.MapGet("/", () => "Inventory API");
