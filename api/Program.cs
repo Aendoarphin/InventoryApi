@@ -1,6 +1,6 @@
-using api.Data;
-using api.Interfaces;
-using api.Repositories;
+using Api.Data;
+using Api.Interfaces;
+using Api.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 string AllowReactClient = "_allowReactClient";

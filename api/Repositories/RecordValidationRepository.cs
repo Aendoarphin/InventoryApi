@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using api.Data;
-using api.Dtos;
-using api.Interfaces;
+using Api.Data;
+using Api.Dtos;
+using Api.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace api.Repositories
+namespace Api.Repositories
 {
     public class RecordValidationRepository : IRecordValidationRepository
     {

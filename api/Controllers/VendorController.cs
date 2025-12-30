@@ -2,17 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using api.Data;
-using api.Dtos;
-using api.Interfaces;
-using api.Models;
+using Api.Data;
+using Api.Dtos;
+using Api.Interfaces;
+using Api.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace api.Controllers
+namespace Api.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("Api/[controller]")]
     public class VendorController : ControllerBase
     {
         private readonly InventoryDbContext _context;
