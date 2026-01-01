@@ -20,5 +20,6 @@ namespace Api.Data
         public DbSet<ResourceCategory> ResourceCategories { get; set; }
         public DbSet<EmployeeResourceAssociation> EmployeeResourceAssociations { get; set; }
         public DbSet<AccessLevel> AccessLevels { get; set; }
+        public DbSet<Device> Devices { get; set; }
     }
 }
