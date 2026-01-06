@@ -1,6 +1,7 @@
 using Api.Data;
 using Api.Interfaces;
 using Api.Repositories;
+using Api.Services;
 using Microsoft.EntityFrameworkCore;
 
 string AllowReactClient = "_allowReactClient";
@@ -17,6 +18,7 @@ builder.Services.AddDbContext<InventoryDbContext>(options =>
 
 builder.Services.AddControllers();
 builder.Services.AddScoped<IRecordValidationRepository, RecordValidationRepository>();
+builder.Services.AddScoped<INetworkService, NetworkService>();
 
 builder.Services.AddCors(options =>
 {
