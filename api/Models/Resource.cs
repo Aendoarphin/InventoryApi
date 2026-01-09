@@ -9,8 +9,6 @@ namespace Api.Models
 {
     public class Resource
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public required int Id { get; set; }
         public required string Name { get; set; }
         public required int CategoryId { get; set; }

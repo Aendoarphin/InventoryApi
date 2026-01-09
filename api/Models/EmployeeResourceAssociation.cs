@@ -9,8 +9,6 @@ namespace Api.Models
 {
     public class EmployeeResourceAssociation
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public required int Id { get; set; }
         public required int ResourceId { get; set; }
         public required int EmployeeId { get; set; }

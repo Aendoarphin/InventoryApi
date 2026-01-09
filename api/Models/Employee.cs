@@ -9,8 +9,6 @@ namespace Api.Models
 {
     public class Employee
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public required int Id { get; set; }
         public required string First { get; set; }
         public required string Last { get; set; }
