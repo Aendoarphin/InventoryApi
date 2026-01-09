@@ -25,7 +25,8 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: AllowReactClient, policy =>
     {
         policy.AllowAnyOrigin()
-        .AllowAnyHeader().AllowAnyMethod();
+            .AllowAnyHeader()
+            .WithMethods(["GET", "POST", "PUT", "DELETE"]);
     });
 });
 
