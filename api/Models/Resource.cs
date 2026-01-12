@@ -17,6 +17,7 @@ namespace Api.Models
 
         public Resource()
         {
+            Id = 0;
             Name = "";
             CategoryId = 0;
             AccessLevelId = 0;

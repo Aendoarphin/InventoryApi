@@ -20,6 +20,7 @@ namespace Api.Models
 
         public Employee()
         {
+            Id = 0;
             First = "";
             Last = "";
             Branch = "";

@@ -15,6 +15,7 @@ namespace Api.Models
 
         public AccessLevel()
         {
+            Id = 0;
             Name = "";
             Active = 1;
         }

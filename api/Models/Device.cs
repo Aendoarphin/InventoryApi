@@ -7,12 +7,13 @@ namespace Api.Models
 {
     public class Device
     {
-        public int Id { get; set; }
+        public required int Id { get; set; }
         public required string Name { get; set; }
         public required string Ipv4 { get; set; }
 
         public Device()
         {
+            Id = 0;
             Name = "";
             Ipv4 = "";
         }

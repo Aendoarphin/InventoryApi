@@ -15,6 +15,7 @@ namespace Api.Models
 
         public ResourceCategory()
         {
+            Id = 0;
             Name = "";
             Active = 1;
         }

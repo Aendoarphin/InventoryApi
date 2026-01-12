@@ -24,7 +24,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: AllowReactClient, policy =>
     {
-        policy.AllowAnyOrigin()
+        policy.WithOrigins("https://ba-itsupport.wsfcu.com")
             .AllowAnyHeader()
             .AllowAnyMethod();
     });
