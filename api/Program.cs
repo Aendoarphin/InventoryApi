@@ -11,6 +11,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Get connection string from configuration
 var connectionString = builder.Configuration["CONN_STR_DEV"]
     ?? throw new InvalidOperationException("Connection string 'CONN_STR_DEV' not found.");
+// Allowed origins for CORS
+var allowedOrigins = builder.Configuration["ALLOWED_ORIGINS"]
+    ?? throw new InvalidOperationException("Allowed origins 'ALLOWED_ORIGINS' not found.");
 
 // Add services to the container.
 builder.Services.AddDbContext<InventoryDbContext>(options =>
@@ -24,7 +27,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: AllowReactClient, policy =>
     {
-        policy.WithOrigins("https://ba-itsupport.wsfcu.com")
+        policy.WithOrigins(allowedOrigins)
             .AllowAnyHeader()
             .AllowAnyMethod();
     });
