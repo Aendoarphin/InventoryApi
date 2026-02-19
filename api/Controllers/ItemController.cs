@@ -7,6 +7,7 @@ using Api.Data;
 using Api.Dtos;
 using Api.Interfaces;
 using Api.Models;
+using Api.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,25 +17,23 @@ namespace Api.Controllers
     [Route("Api/[controller]")]
     public class ItemController : ControllerBase
     {
-        private readonly InventoryDbContext _context;
-        private readonly IRecordValidationRepository _recordValidationRepo;
-        public ItemController(InventoryDbContext context, IRecordValidationRepository recordValidationRepo)
+        private readonly IDataUtilityRepository _dataUtilRepo;
+        public ItemController(IDataUtilityRepository dataUtilRepo)
         {
-            _context = context;
-            _recordValidationRepo = recordValidationRepo;
+            _dataUtilRepo = dataUtilRepo;
         }
 
         [HttpGet]
         public async Task<ActionResult> GetAll()
         {
-            var items = await _context.Items.ToListAsync();
+            var items = await _dataUtilRepo.GetAll<Item>();
             return Ok(items);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Item>> GetItem(int id)
         {
-            var item = await _context.Items.FindAsync(id);
+            var item = await _dataUtilRepo.GetById<Item>(id);
 
             if (item == null)
             {
@@ -47,81 +46,73 @@ namespace Api.Controllers
         [HttpGet("count")]
         public async Task<ActionResult<Item>> GetItemCount()
         {
-            var itemCount = await _context.Items.CountAsync();
+            var itemCount = await _dataUtilRepo.GetCount<Item>();
             return Ok(itemCount);
         }
 
         [HttpGet("search")]
-        public async Task<ActionResult<Item>> GetItemByKeyword(string keyword)
+        public async Task<ActionResult<IEnumerable<Item>>> GetItemByKeyword(string? keyword)
         {
-            var matches = await _context.Items.Where(i =>
-                i.Id.ToString().ToLower().Contains(keyword) ||
-                i.Serial!.ToString().ToLower().Contains(keyword) ||
-                i.Description!.ToString().ToLower().Contains(keyword) ||
-                i.Branch!.ToString().ToLower().Contains(keyword) ||
-                i.Office!.ToString().ToLower().Contains(keyword) ||
-                i.Comments!.ToString().ToLower().Contains(keyword) ||
-                i.PurchaseDate.ToString()!.ToLower().Contains(keyword) ||
-                i.ReplacementCost.ToString()!.ToLower().Contains(keyword)).ToListAsync();
+            if (string.IsNullOrWhiteSpace(keyword)) return BadRequest("Search keyword cannot be empty.");
+
+            var allItems = await _dataUtilRepo.GetAll<Item>();
+            if (allItems == null) return NotFound();
+
+            var searchLower = keyword.ToLower();
+
+            var matches = allItems.Where(i =>
+                i.Id.ToString().ToLower().Contains(searchLower) ||
+                (i.Serial?.ToString().ToLower().Contains(searchLower) ?? false) ||
+                (i.Description?.ToString().ToLower().Contains(searchLower) ?? false) ||
+                (i.Branch?.ToString().ToLower().Contains(searchLower) ?? false) ||
+                (i.Office?.ToString().ToLower().Contains(searchLower) ?? false) ||
+                (i.Comments?.ToString().ToLower().Contains(searchLower) ?? false) ||
+                i.PurchaseDate.ToString()!.ToLower().Contains(searchLower) ||
+                i.ReplacementCost.ToString()!.ToLower().Contains(searchLower)
+            ).ToList();
+
             return Ok(matches);
         }
 
         [HttpGet("partial")]
         public async Task<ActionResult> GetPartialItems()
         {
-            var partialItems = await _recordValidationRepo.GetPartialRecords<Item>();
+            var partialItems = await _dataUtilRepo.GetPartial<Item>();
             return Ok(partialItems);
         }
 
         [HttpGet("partial/count")]
         public async Task<ActionResult<int>> GetPartialItemsCount()
         {
-            var count = await _recordValidationRepo.GetTotalPartialRecords<Item>();
+            var count = await _dataUtilRepo.GetPartialCount<Item>();
             return count;
         }
 
         [HttpGet("metrics")]
         public async Task<ActionResult<RecordMetricDto>> GetItemMetrics()
         {
-            var partialCount = await _recordValidationRepo.GetTotalPartialRecords<Item>();
-            var totalCount = await _context.Items.CountAsync();
-            var metrics = new RecordMetricDto { Complete = totalCount - partialCount, Partial = partialCount };
-            Console.WriteLine(metrics);
+            var metrics = await _dataUtilRepo.GetMetrics<Item>();
             return metrics;
         }
 
         [HttpPost]
         public async Task<ActionResult> PostItem(Item item)
         {
-            _context.Items.Add(item);
+            var entity = await _dataUtilRepo.Create(item);
 
-            await _context.SaveChangesAsync();
+            if (entity == null) return BadRequest();
 
-            return CreatedAtAction(nameof(GetItem), new { item.Id }, item);
+            return CreatedAtAction(nameof(GetItem), new { entity.Id }, entity);
         }
 
-        [HttpPut]
+        [HttpPut("{id}")]
         public async Task<ActionResult> PutItem(int id, Item item)
         {
             if (id != item.Id) return BadRequest();
 
-            _context.Items.Entry(item).State = EntityState.Modified;
+            var updated = await _dataUtilRepo.Update(id, item);
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!_context.Items.Any(i => i.Id == id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            if (updated == null) return NotFound();
 
             return NoContent();
         }
@@ -129,10 +120,7 @@ namespace Api.Controllers
         [HttpDelete]
         public async Task<ActionResult> DeleteItem(int id)
         {
-            var item = _context.Items.Find(id);
-            if (item == null) return NotFound();
-            _context.Items.Remove(item);
-            await _context.SaveChangesAsync();
+            var item = await _dataUtilRepo.Delete<Item>(id);
             return Ok(item);
         }
     }

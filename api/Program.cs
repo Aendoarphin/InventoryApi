@@ -20,7 +20,7 @@ builder.Services.AddDbContext<InventoryDbContext>(options =>
     options.UseSqlServer(connectionString));
 
 builder.Services.AddControllers();
-builder.Services.AddScoped<IRecordValidationRepository, RecordValidationRepository>();
+builder.Services.AddScoped<IDataUtilityRepository, DataUtilityRepository>();
 builder.Services.AddScoped<INetworkService, NetworkService>();
 
 builder.Services.AddCors(options =>

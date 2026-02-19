@@ -16,7 +16,7 @@ namespace Api.Interfaces
         Task<int> GetPartialCount<T>() where T : class;
         Task<RecordMetricDto> GetMetrics<T>() where T : class;
         Task<T?> Create<T>(T entity) where T : class;
-        Task<T?> Update<T>(T entity) where T : class;
+        Task<T?> Update<T>(int id, T entity) where T : class;
         Task<T?> Delete<T>(int id) where T : class;
     }
 }

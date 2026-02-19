@@ -16,6 +16,33 @@ namespace Api.Repositories
     {
         private readonly InventoryDbContext _context;
 
+        /// <summary>
+        /// Builds a lambda expression like: x => x.Prop1 == null || x.Prop2 == null ...
+        /// for all nullable properties on T.
+        /// </summary>
+        private static Expression<Func<T, bool>>? BuildNullCheckExpression<T>() where T : class
+        {
+            var parameter = Expression.Parameter(typeof(T), "x");
+            Expression? body = null;
+
+            foreach (var prop in typeof(T).GetProperties())
+            {
+                // Check for reference type or Nullable<T>
+                if (!prop.PropertyType.IsValueType || Nullable.GetUnderlyingType(prop.PropertyType) != null)
+                {
+                    var propAccess = Expression.Property(parameter, prop);
+                    var nullConstant = Expression.Constant(null, prop.PropertyType);
+                    var equals = Expression.Equal(propAccess, nullConstant);
+
+                    body = body == null ? equals : Expression.OrElse(body, equals);
+                }
+            }
+
+            if (body == null) return null;
+
+            return Expression.Lambda<Func<T, bool>>(body, parameter);
+        }
+
         public DataUtilityRepository(InventoryDbContext context) => _context = context;
 
         public async Task<IEnumerable<T>> GetAll<T>() where T : class
@@ -26,7 +53,7 @@ namespace Api.Repositories
 
         public async Task<T?> GetById<T>(int id) where T : class
         {
-            var entity = await _context.FindAsync<T>();
+            var entity = await _context.FindAsync<T>(id);
             return entity;
         }
 
@@ -36,7 +63,7 @@ namespace Api.Repositories
             return entityCount;
         }
 
-        public async Task<List<T>> GetPartial<T>() where T : class
+        public async Task<IEnumerable<T>> GetPartial<T>() where T : class
         {
             var lambda = BuildNullCheckExpression<T>();
             if (lambda == null) return new List<T>();
@@ -69,11 +96,21 @@ namespace Api.Repositories
             return entity;
         }
 
-        public async Task<T?> Update<T>(T entity) where T : class
+        public async Task<T?> Update<T>(int id, T entity) where T : class
         {
-            _context.Set<T>().Update(entity);
-            await _context.SaveChangesAsync();
-            return entity;
+            var existing = await _context.FindAsync<T>(id);
+            if (existing == null) return null;
+            _context.Entry(existing).CurrentValues.SetValues(entity);
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
+            return existing;
         }
 
         public async Task<T?> Delete<T>(int id) where T : class
@@ -84,32 +121,5 @@ namespace Api.Repositories
             await _context.SaveChangesAsync();
             return record;
         }
-
-        /// <summary>
-        /// Builds a lambda expression like: x => x.Prop1 == null || x.Prop2 == null ...
-        /// for all nullable properties on T.
-        /// </summary>
-        private static Expression<Func<T, bool>>? BuildNullCheckExpression<T>() where T : class
-        {
-            var parameter = Expression.Parameter(typeof(T), "x");
-            Expression? body = null;
-
-            foreach (var prop in typeof(T).GetProperties())
-            {
-                // Check for reference type or Nullable<T>
-                if (!prop.PropertyType.IsValueType || Nullable.GetUnderlyingType(prop.PropertyType) != null)
-                {
-                    var propAccess = Expression.Property(parameter, prop);
-                    var nullConstant = Expression.Constant(null, prop.PropertyType);
-                    var equals = Expression.Equal(propAccess, nullConstant);
-
-                    body = body == null ? equals : Expression.OrElse(body, equals);
-                }
-            }
-
-            if (body == null) return null;
-
-            return Expression.Lambda<Func<T, bool>>(body, parameter);
-        }
     }
-} // continue here
+}
