@@ -51,23 +51,9 @@ namespace Api.Controllers
         }
 
         [HttpGet("search")]
-        public async Task<ActionResult<Vendor>> GetVendorByKeyword(string keyword)
+        public async Task<ActionResult<IEnumerable<Vendor>>> GetVendorByKeyword(string? keyword)
         {
-            var allVendors = await _dataUtilRepo.GetAll<Vendor>();
-            var matches = allVendors.Where(u =>
-                (u.Id.ToString()?.ToLower().Contains(keyword) ?? false) ||
-                (u.Name?.ToLower().Contains(keyword) ?? false) ||
-                (u.Address?.ToLower().Contains(keyword) ?? false) ||
-                (u.City?.ToLower().Contains(keyword) ?? false) ||
-                (u.Phone?.ToLower().Contains(keyword) ?? false) ||
-                (u.Fax?.ToLower().Contains(keyword) ?? false) ||
-                (u.Contact?.ToString().ToLower().Contains(keyword) ?? false) ||
-                (u.Email?.ToString().ToLower().Contains(keyword) ?? false) ||
-                (u.Website?.ToString().ToLower().Contains(keyword) ?? false) ||
-                (u.ProductServiceArea?.ToString().ToLower().Contains(keyword) ?? false) ||
-                (u.ContractOnFile?.ToString().ToLower().Contains(keyword) ?? false) ||
-                (u.Critical?.ToString().ToLower().Contains(keyword) ?? false) ||
-                (u.Comments?.ToString().ToLower().Contains(keyword) ?? false)).ToList();
+            var matches = await _dataUtilRepo.Search<Vendor>(keyword ?? string.Empty);
             return Ok(matches);
         }
 

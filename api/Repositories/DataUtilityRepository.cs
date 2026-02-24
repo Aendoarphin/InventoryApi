@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Api.Repositories
 {
-    public class DataUtilityRepository: IDataUtilityRepository
+    public class DataUtilityRepository : IDataUtilityRepository
     {
         private readonly InventoryDbContext _context;
 
@@ -61,6 +61,26 @@ namespace Api.Repositories
         {
             var entityCount = await _context.Set<T>().CountAsync();
             return entityCount;
+        }
+
+        public async Task<IEnumerable<T>> Search<T>(string keyword) where T : class
+        {
+            var allItems = await GetAll<T>();
+
+            if (string.IsNullOrWhiteSpace(keyword)) return allItems;
+
+            var searchLower = keyword.ToLower();
+            var properties = typeof(T).GetProperties();
+
+            return allItems.Where(item =>
+            {
+                return properties
+                    .Any(prop =>
+                    {
+                        var value = prop.GetValue(item)?.ToString();
+                        return value != null && value.ToLower().Contains(searchLower);
+                    });
+            }).ToList();
         }
 
         public async Task<IEnumerable<T>> GetPartial<T>() where T : class

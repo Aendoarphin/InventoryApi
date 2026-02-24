@@ -53,24 +53,7 @@ namespace Api.Controllers
         [HttpGet("search")]
         public async Task<ActionResult<IEnumerable<Item>>> GetItemByKeyword(string? keyword)
         {
-            if (string.IsNullOrWhiteSpace(keyword)) return BadRequest("Search keyword cannot be empty.");
-
-            var allItems = await _dataUtilRepo.GetAll<Item>();
-            if (allItems == null) return NotFound();
-
-            var searchLower = keyword.ToLower();
-
-            var matches = allItems.Where(i =>
-                i.Id.ToString().ToLower().Contains(searchLower) ||
-                (i.Serial?.ToString().ToLower().Contains(searchLower) ?? false) ||
-                (i.Description?.ToString().ToLower().Contains(searchLower) ?? false) ||
-                (i.Branch?.ToString().ToLower().Contains(searchLower) ?? false) ||
-                (i.Office?.ToString().ToLower().Contains(searchLower) ?? false) ||
-                (i.Comments?.ToString().ToLower().Contains(searchLower) ?? false) ||
-                i.PurchaseDate.ToString()!.ToLower().Contains(searchLower) ||
-                i.ReplacementCost.ToString()!.ToLower().Contains(searchLower)
-            ).ToList();
-
+            var matches = await _dataUtilRepo.Search<Item>(keyword ?? string.Empty);
             return Ok(matches);
         }
 

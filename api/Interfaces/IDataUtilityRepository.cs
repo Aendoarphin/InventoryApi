@@ -12,6 +12,7 @@ namespace Api.Interfaces
         Task<IEnumerable<T>> GetAll<T>() where T : class;
         Task<T?> GetById<T>(int id) where T : class;
         Task<int> GetCount<T>() where T : class;
+        Task<IEnumerable<T>> Search<T>(string keyword) where T : class;
         Task<IEnumerable<T>> GetPartial<T>() where T : class;
         Task<int> GetPartialCount<T>() where T : class;
         Task<RecordMetricDto> GetMetrics<T>() where T : class;
